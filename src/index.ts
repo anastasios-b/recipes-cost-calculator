@@ -1,14 +1,12 @@
-import { renderHtml } from "./renderHtml";
-
 export default {
-	async fetch(request, env) {
-		const stmt = env.DB.prepare("SELECT * FROM comments LIMIT 3");
-		const { results } = await stmt.all();
+  async fetch(request, env) {
+    const ip = request.headers.get("cf-connecting-ip") || "unknown"
 
-		return new Response(renderHtml(JSON.stringify(results, null, 2)), {
-			headers: {
-				"content-type": "text/html",
-			},
-		});
-	},
-} satisfies ExportedHandler<Env>;
+    const { success } = await env.MY_RATE_LIMITER.limit({ key: ip })
+    if (!success) {
+      return new Response("429 Too Many Requests", { status: 429 })
+    }
+
+    return new Response("Success")
+  }
+}
