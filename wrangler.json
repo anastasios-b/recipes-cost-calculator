@@ -1,0 +1,16 @@
+{
+	"compatibility_date": "2025-10-08",
+	"main": "src/index.ts",
+	"name": "recipies-cost-calculator",
+	"upload_source_maps": true,
+	"d1_databases": [
+		{
+			"binding": "DB",
+			"database_id": "e6627952-ae86-4348-bc57-ba720a5a3914",
+			"database_name": "recipies-cost-calculator-database"
+		}
+	],
+	"observability": {
+		"enabled": true
+	}
+}
