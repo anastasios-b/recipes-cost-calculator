@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Example Recipe Calculation</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+            color: #333;
+        }
+        h1, h2, h3 {
+            color: #2c3e50;
+        }
+        .calculation-container, .results-container {
+            background: #f9f9f9;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .parts-list, .labor-list {
+            margin: 15px 0;
+            padding: 15px;
+            background: white;
+            border-radius: 4px;
+            border: 1px solid #eee;
+        }
+        .part-item, .labor-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid #eee;
+        }
+        .part-item:last-child, .labor-item:last-child {
+            border-bottom: none;
+        }
+        .total-row {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 15px;
+            padding-top: 10px;
+            border-top: 2px solid #eee;
+            font-weight: bold;
+        }
+        .cost-summary {
+            background: white;
+            padding: 20px;
+            border-radius: 4px;
+            border: 1px solid #eee;
+        }
+        .cost-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+        }
+        .cost-row.total {
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #2c3e50;
+            border-top: 2px solid #2c3e50;
+            margin-top: 10px;
+            padding-top: 10px;
+        }
+        .error {
+            color: #e74c3c;
+            padding: 10px;
+            background: #fdecea;
+            border: 1px solid #e74c3c;
+            border-radius: 4px;
+            margin: 10px 0;
+        }
+        .api-endpoint {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+            border-left: 4px solid #007bff;
+        }
+        .endpoint {
+            background: white;
+            border-radius: 6px;
+            padding: 15px;
+            margin: 15px 0;
+            border: 1px solid #e9ecef;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+        .endpoint h4 {
+            color: #007bff;
+            margin: 0 0 10px 0;
+            font-size: 1.1em;
+        }
+        .endpoint p {
+            margin: 5px 0;
+        }
+        .endpoint code {
+            background: #f8f9fa;
+            padding: 8px 12px;
+            border-radius: 4px;
+            border: 1px solid #e9ecef;
+            display: inline-block;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+            color: #d63384;
+        }
+        .schema pre {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 6px;
+            border: 1px solid #e9ecef;
+            overflow-x: auto;
+            font-size: 0.9em;
+            line-height: 1.4;
+        }
+        .example {
+            background: white;
+            border-radius: 6px;
+            padding: 15px;
+            margin: 15px 0;
+            border: 1px solid #e9ecef;
+        }
+        .example h4 {
+            color: #28a745;
+            margin: 0 0 10px 0;
+        }
+        .example pre {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 4px;
+            border: 1px solid #e9ecef;
+            overflow-x: auto;
+            font-size: 0.85em;
+            line-height: 1.4;
+        }
+    </style>
+</head>
+<body>
+    
+    <main>
+        <section>
+            <h1>
+                This example demonstrates how a simple recipie calculation works.
+            </h1>
+        </section>
+
+        <section id="example-explanation">
+            <p>
+                Let's say we have a product recipie for Metal Chair.
+            </p>
+            <p>
+                This product is built using some basic materials, including bolts, metal rods etc.
+            </p>
+            <p>
+                It also requires people to work on it (assembly & painting).
+            </p>
+        </section>
+
+        <section id="calculation-data"></section>
+
+        <section id="calculation-results"></section>
+
+        <section id="api-documentation">
+            <h2>API Documentation</h2>
+            <p>This server provides the following REST API endpoints for recipe management:</p>
+            
+            <div class="api-endpoint">
+                <h3>📖 Recipe Management</h3>
+                
+                <div class="endpoint">
+                    <h4>GET /api/recipes</h4>
+                    <p><strong>Description:</strong> Retrieve all recipes</p>
+                    <p><strong>Response:</strong> Array of recipe objects</p>
+                    <code>GET /api/recipes</code>
+                </div>
+
+                <div class="endpoint">
+                    <h4>GET /api/recipes/:id</h4>
+                    <p><strong>Description:</strong> Retrieve a specific recipe by ID</p>
+                    <p><strong>Parameters:</strong> id (string) - Recipe ID</p>
+                    <p><strong>Response:</strong> Single recipe object</p>
+                    <code>GET /api/recipes/123e4567-e89b-12d3-a456-426614174000</code>
+                </div>
+
+                <div class="endpoint">
+                    <h4>POST /api/recipes</h4>
+                    <p><strong>Description:</strong> Create a new recipe</p>
+                    <p><strong>Body:</strong> Recipe object (see schema below)</p>
+                    <p><strong>Response:</strong> Created recipe with ID and timestamps</p>
+                    <code>POST /api/recipes</code>
+                </div>
+
+                <div class="endpoint">
+                    <h4>PUT /api/recipes/:id</h4>
+                    <p><strong>Description:</strong> Update an existing recipe</p>
+                    <p><strong>Parameters:</strong> id (string) - Recipe ID</p>
+                    <p><strong>Body:</strong> Updated recipe object</p>
+                    <p><strong>Response:</strong> Updated recipe object</p>
+                    <code>PUT /api/recipes/123e4567-e89b-12d3-a456-426614174000</code>
+                </div>
+
+                <div class="endpoint">
+                    <h4>DELETE /api/recipes/:id</h4>
+                    <p><strong>Description:</strong> Delete a recipe</p>
+                    <p><strong>Parameters:</strong> id (string) - Recipe ID</p>
+                    <p><strong>Response:</strong> 204 No Content</p>
+                    <code>DELETE /api/recipes/123e4567-e89b-12d3-a456-426614174000</code>
+                </div>
+            </div>
+
+            <div class="api-endpoint">
+                <h3>💰 Cost Calculation</h3>
+                
+                <div class="endpoint">
+                    <h4>GET /api/recipes/:id/cost</h4>
+                    <p><strong>Description:</strong> Get detailed cost breakdown for a specific recipe</p>
+                    <p><strong>Parameters:</strong> id (string) - Recipe ID</p>
+                    <p><strong>Response:</strong> Detailed cost analysis including parts, labor, waste factor</p>
+                    <code>GET /api/recipes/123e4567-e89b-12d3-a456-426614174000/cost</code>
+                </div>
+
+                <div class="endpoint">
+                    <h4>GET /api/recipes/cost/summary</h4>
+                    <p><strong>Description:</strong> Get cost summary for all recipes</p>
+                </div>
+
+                <div class="api-endpoint">
+                    <h3>📋 Recipe Schema</h3>
+                    <div class="schema">
+                        <pre><code>
+{
+  "name": "Metal Chair",
+  "weight": 15.5,
+  "dimensions": {
+    "length": 80,
+    "width": 50,
+    "height": 100,
+    "unit": "cm"
+  },
+  "yield_percentage": 0.95,
+  "waste_factor": 0.05,
+  "unit_of_measure": "piece",
+  "inventory_location": "warehouse-a",
+  "parts": [
+    {
+      "name": "Metal Rod",
+      "quantity": 4,
+      "cost_per_unit": 12.50
+    },
+    {
+      "name": "Bolts",
+      "quantity": 16,
+      "cost_per_unit": 0.25
+    }
+  ],
+  "labor": [
+    {
+      "type": "Assembly",
+      "hours_needed": 2,
+      "cost_per_hour": 25.00
+    },
+    {
+      "type": "Painting",
+      "hours_needed": 1,
+      "cost_per_hour": 30.00
+    }
+  ]
+}</code></pre>
+                </div>
+            </div>
+
+            <div class="api-endpoint">
+                <h3>🔧 Usage Examples</h3>
+                
+                <div class="example">
+                    <h4>Create a new recipe:</h4>
+                    <pre><code>fetch('/api/recipes', {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json'
+  },
+  body: JSON.stringify({
+    name: "Wooden Table",
+    weight: 25.0,
+    dimensions: {
+      length: 120,
+      width: 80,
+      height: 75,
+      unit: "cm"
+    },
+    yield_percentage: 0.90,
+    waste_factor: 0.10,
+    unit_of_measure: "piece",
+    inventory_location: "workshop",
+    parts: [
+      {
+        name: "Wood Plank",
+        quantity: 6,
+        cost_per_unit: 45.00
+      }
+    ],
+    labor: [
+      {
+        type: "Carpentry",
+        hours_needed: 4,
+        cost_per_hour: 35.00
+      }
+    ]
+  })
+});</code></pre>
+                </div>
+
+                <div class="example">
+                    <h4>Get recipe cost breakdown:</h4>
+                    <pre><code>fetch('/api/recipes/recipe-id/cost')
+  .then(response => response.json())
+  .then(data => {
+    console.log('Total cost:', data.cost_summary.total);
+    console.log('Parts cost:', data.parts.total);
+    console.log('Labor cost:', data.labor.total);
+  });</code></pre>
+                </div>
+            </div>
+        </section>
+    </main>
+</body>
+</html>

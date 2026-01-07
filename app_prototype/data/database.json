@@ -1,0 +1,199 @@
+[
+  {
+    "id": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+    "name": "Metal chair",
+    "weight": 7.5,
+    "dimensions": {
+      "length": 45,
+      "width": 50,
+      "height": 85,
+      "unit": "cm"
+    },
+    "yield_percentage": 95,
+    "waste_factor": 0.05,
+    "unit_of_measure": "pieces",
+    "inventory_location": "A-12-05",
+    "shelf_life": null,
+    "parts": [
+      {
+        "name": "Metal bolt",
+        "quantity": 16,
+        "cost_per_unit": 0.4
+      },
+      {
+        "name": "Metal rods",
+        "quantity": 6,
+        "cost_per_unit": 2
+      },
+      {
+        "name": "Frame metal rods",
+        "quantity": 8,
+        "cost_per_unit": 1.8
+      },
+      {
+        "name": "Fiber",
+        "quantity": 2,
+        "cost_per_unit": 4
+      }
+    ],
+    "labor": [
+      {
+        "type": "Metal work",
+        "cost_per_hour": 12,
+        "hours_needed": 0.3
+      },
+      {
+        "type": "Paint job",
+        "cost_per_hour": 18,
+        "hours_needed": 1.2
+      }
+    ]
+  },
+  {
+    "id": "b2c3d4e5-f6a7-8901-bcde-f12345678901",
+    "name": "Wooden Table",
+    "weight": 25,
+    "dimensions": {
+      "length": 120,
+      "width": 80,
+      "height": 75,
+      "unit": "cm"
+    },
+    "yield_percentage": 92,
+    "waste_factor": 0.08,
+    "unit_of_measure": "pieces",
+    "inventory_location": "B-07-12",
+    "shelf_life": null,
+    "parts": [
+      {
+        "name": "Wooden planks",
+        "quantity": 4,
+        "cost_per_unit": 5.5
+      },
+      {
+        "name": "Screws",
+        "quantity": 24,
+        "cost_per_unit": 0.2
+      },
+      {
+        "name": "Wood glue",
+        "quantity": 1,
+        "cost_per_unit": 3.5
+      },
+      {
+        "name": "Varnish",
+        "quantity": 0.5,
+        "cost_per_unit": 8
+      }
+    ],
+    "labor": [
+      {
+        "type": "Carpentry",
+        "cost_per_hour": 15,
+        "hours_needed": 2.5
+      },
+      {
+        "type": "Finishing",
+        "cost_per_hour": 12,
+        "hours_needed": 1.5
+      }
+    ]
+  },
+  {
+    "id": "c3d4e5f6-a7b8-9012-cdef-234567890123",
+    "name": "Plastic Stool",
+    "weight": 2.5,
+    "dimensions": {
+      "length": 30,
+      "width": 30,
+      "height": 45,
+      "unit": "cm"
+    },
+    "yield_percentage": 98,
+    "waste_factor": 0.02,
+    "unit_of_measure": "pieces",
+    "inventory_location": "C-03-08",
+    "shelf_life": 60,
+    "parts": [
+      {
+        "name": "Plastic pellets",
+        "quantity": 3,
+        "cost_per_unit": 2.2
+      },
+      {
+        "name": "Rubber feet",
+        "quantity": 4,
+        "cost_per_unit": 0.8
+      },
+      {
+        "name": "Metal screws",
+        "quantity": 8,
+        "cost_per_unit": 0.15
+      }
+    ],
+    "labor": [
+      {
+        "type": "Molding",
+        "cost_per_hour": 14,
+        "hours_needed": 0.5
+      },
+      {
+        "type": "Assembly",
+        "cost_per_hour": 10,
+        "hours_needed": 0.3
+      }
+    ]
+  },
+  {
+    "id": "797f369b-37a8-4bfe-b39b-4572fc0def5c",
+    "name": "Metal chair New name",
+    "weight": 7.5,
+    "dimensions": {
+      "length": 45,
+      "width": 50,
+      "height": 85,
+      "unit": "cm"
+    },
+    "yield_percentage": 95,
+    "waste_factor": 0.05,
+    "unit_of_measure": "pieces",
+    "inventory_location": "A-12-05",
+    "shelf_life": null,
+    "parts": [
+      {
+        "name": "Metal bolt",
+        "quantity": 16,
+        "cost_per_unit": 0.4
+      },
+      {
+        "name": "Metal rods",
+        "quantity": 6,
+        "cost_per_unit": 2
+      },
+      {
+        "name": "Frame metal rods",
+        "quantity": 8,
+        "cost_per_unit": 1.8
+      },
+      {
+        "name": "Fiber",
+        "quantity": 2,
+        "cost_per_unit": 4
+      }
+    ],
+    "labor": [
+      {
+        "type": "Metal work",
+        "cost_per_hour": 12,
+        "hours_needed": 0.3
+      },
+      {
+        "type": "Paint job",
+        "cost_per_hour": 18,
+        "hours_needed": 1.2
+      }
+    ],
+    "created_at": "2026-01-06T23:57:44.540Z",
+    "updated_at": "2026-01-07T00:00:43.226Z"
+  }
+]
