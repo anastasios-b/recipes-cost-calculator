@@ -1,4 +1,4 @@
--- Migration number: 0002 	 2025-01-07T00:00:00.000Z
+-- Migration number: 0001 	 2025-01-07T00:00:00.000Z
 CREATE TABLE IF NOT EXISTS recipes (
     id TEXT PRIMARY KEY NOT NULL,
     name TEXT NOT NULL,

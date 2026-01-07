@@ -399,32 +399,37 @@ export default {
             }
 
             if (method === 'GET' && pathname === '/api/recipes/cost/summary') {
-                const recipes = await getAllRecipes(env);
-                const summary = recipes.map(recipe => {
-                    const cost = calculateRecipeCost(recipe);
-                    return {
-                        recipe_id: recipe.id,
-                        recipe_name: recipe.name,
-                        total_cost: cost.cost_summary.total,
-                        parts_cost: recipe.parts.reduce((sum, part) => sum + (part.quantity * part.cost_per_unit), 0),
-                        labor_cost: recipe.labor.reduce((sum, labor) => sum + (labor.hours_needed * labor.cost_per_hour), 0),
-                        unit_of_measure: cost.cost_summary.unit_of_measure
-                    };
-                });
-                
-                const grandTotal = summary.reduce((total, item) => total + item.total_cost, 0);
-                
-                return sendJSON({
-                    recipes: summary,
-                    totals: {
-                        total_parts_cost: summary.reduce((sum, item) => sum + item.parts_cost, 0),
-                        total_labor_cost: summary.reduce((sum, item) => sum + item.labor_cost, 0),
-                        grand_total: grandTotal,
-                        average_cost_per_recipe: summary.length > 0 ? grandTotal / summary.length : 0,
-                        total_recipes: summary.length,
-                        currency: 'USD'
-                    }
-                });
+                try {
+                    const recipes = await getAllRecipes(env);
+                    const summary = recipes.map(recipe => {
+                        const cost = calculateRecipeCost(recipe);
+                        return {
+                            recipe_id: recipe.id,
+                            recipe_name: recipe.name,
+                            total_cost: cost.cost_summary.total,
+                            parts_cost: recipe.parts.reduce((sum, part) => sum + (part.quantity * part.cost_per_unit), 0),
+                            labor_cost: recipe.labor.reduce((sum, labor) => sum + (labor.hours_needed * labor.cost_per_hour), 0),
+                            unit_of_measure: cost.cost_summary.unit_of_measure
+                        };
+                    });
+                    
+                    const grandTotal = summary.reduce((total, item) => total + item.total_cost, 0);
+                    
+                    return sendJSON({
+                        recipes: summary,
+                        totals: {
+                            total_parts_cost: summary.reduce((sum, item) => sum + item.parts_cost, 0),
+                            total_labor_cost: summary.reduce((sum, item) => sum + item.labor_cost, 0),
+                            grand_total: grandTotal,
+                            average_cost_per_recipe: summary.length > 0 ? grandTotal / summary.length : 0,
+                            total_recipes: summary.length,
+                            currency: 'USD'
+                        }
+                    });
+                } catch (dbError) {
+                    console.error('Database error in cost summary:', dbError);
+                    return sendJSON({ error: 'Database error fetching cost summary', details: dbError instanceof Error ? dbError.message : 'Unknown error' }, 500);
+                }
             }
 
             if (method === 'GET' && pathname.startsWith('/api/recipes/') && pathname.endsWith('/cost')) {
@@ -440,9 +445,32 @@ export default {
                 return sendJSON(costBreakdown);
             }
 
+            if (method === 'GET' && pathname === '/api/test') {
+                try {
+                    // Simple database test
+                    const result = await env.DB.prepare('SELECT COUNT(*) as count FROM recipes').first();
+                    return sendJSON({ 
+                        status: 'Database connected', 
+                        recipe_count: result?.count || 0,
+                        database_info: 'D1 connection successful'
+                    });
+                } catch (dbError) {
+                    console.error('Database test error:', dbError);
+                    return sendJSON({ 
+                        error: 'Database connection failed', 
+                        details: dbError instanceof Error ? dbError.message : 'Unknown error'
+                    }, 500);
+                }
+            }
+
             if (method === 'GET' && pathname === '/api/recipes') {
-                const recipes = await getAllRecipes(env);
-                return sendJSON(recipes);
+                try {
+                    const recipes = await getAllRecipes(env);
+                    return sendJSON(recipes);
+                } catch (dbError) {
+                    console.error('Database error fetching recipes:', dbError);
+                    return sendJSON({ error: 'Database error fetching recipes', details: dbError instanceof Error ? dbError.message : 'Unknown error' }, 500);
+                }
             }
 
             if (method === 'GET' && pathname.startsWith('/api/recipes/')) {
