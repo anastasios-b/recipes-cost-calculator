@@ -345,9 +345,22 @@ export default {
             return corsResponse;
         }
 
-        const url = new URL(request.url);
+        const { pathname } = new URL(request.url);
+        
+        // Apply rate limiting to API endpoints
+        if (pathname.startsWith('/api/')) {
+            const { success } = await env.API_RATE_LIMITER.limit({ key: pathname });
+            if (!success) {
+                return new Response(`429 Failure – rate limit exceeded for ${pathname}`, { 
+                    status: 429,
+                    headers: {
+                        'Access-Control-Allow-Origin': '*',
+                    }
+                });
+            }
+        }
+
         const method = request.method;
-        const pathname = url.pathname;
 
         try {
             if (method === 'GET' && pathname === '/') {
